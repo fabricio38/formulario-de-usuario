@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Table</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        #user-table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #user-table th, #user-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        #user-table th {
+            background-color: #f0f0f0;
+        }
+
+        #add-user-btn {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #add-user-btn:hover {
+            background-color: #3e8e41;
+        }
+    </style>
+</head>
+<body>
+    <h1>User Table</h1>
+    <table id="user-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="user-table-body">
+            <!-- table data will be rendered here -->
+        </tbody>
+    </table>
+
+    <button id="add-user-btn">Add User</button>
+
+    <script>
+        let users = [
+            { id: 1, name: "John Doe", email: "john@example.com" },
+            { id: 2, name: "Jane Doe", email: "jane@example.com" },
+            { id: 3, name: "Bob Smith", email: "bob@example.com" },
+            { id: 4, name: "fabricio santos", email:"fb-santos2011@hotmail.com"},
+            { id: 5, name: "kaleb fernandes", email:"kaleb.fernandes@gmail.com"},
+        ];
+
+        const userTableBody = document.getElementById("user-table-body");
+        const addUserBtn = document.getElementById("add-user-btn");
+
+        // render user table data
+        function renderUsers() {
+            userTableBody.innerHTML = "";
+            users.forEach((user) => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${user.id}</td>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>
+                        <button class="edit-btn">Edit</button>
+                        <button class="delete-btn">Delete</button>
+                    </td>
+                `;
+                userTableBody.appendChild(row);
+            });
+        }
+
+        // add event listener to add user button
+        addUserBtn.addEventListener("click", () => {
+            const newUser = {
+                id: users.length + 1,
+                name: prompt("Enter user name:"),
+                email: prompt("Enter user email:")
+            };
+            users.push(newUser);
+            renderUsers();
+        });
+
+        // add event listener to edit and delete buttons
+        userTableBody.addEventListener("click", (e) => {
+            if (e.target.classList.contains("edit-btn")) {
+                const userId = e.target.parentNode.parentNode.cells[0].textContent;
+                const user = users.find((user) => user.id === parseInt(userId));
+                user.name = prompt("Enter new user name:", user.name);
+                user.email = prompt("Enter new user email:", user.email);
+                renderUsers();
+            } else if (e.target.classList.contains("delete-btn")) {
+                const userId = e.target.parentNode.parentNode.cells[0].textContent;
+                users = users.filter((user) => user.id !== parseInt(userId));
+                renderUsers();
+            }
+        });
+
+        renderUsers();
+    </script>
+</body>
+</html>
